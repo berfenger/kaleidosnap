@@ -1,7 +1,7 @@
 FROM python:3.9-slim as builder
 
 RUN apt update
-RUN apt install -y build-essential libjpeg8-dev zlib1g-dev
+RUN apt install -y build-essential libjpeg62-turbo-dev zlib1g-dev
 
 RUN python3 -m venv /opt/venv
 COPY requirements.txt /opt/venv
