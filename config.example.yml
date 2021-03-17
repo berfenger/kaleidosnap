@@ -1,0 +1,16 @@
+sources:
+  - url: "http://192.168.20.1/cgi-bin/api.cgi?cmd=Snap&channel=0&user=myuser&password=mypassword"
+    id: cam1
+    filters:
+      - "downscale:640"
+  - url: "http://192.168.20.2/cgi-bin/api.cgi?cmd=Snap&channel=0&user=myuser&password=mypassword"
+    id: cam2
+    filters:
+      - "downscale:640"
+      - "mask:0,0,250,250"
+  - url: "http://192.168.20.1/cgi-bin/api.cgi?cmd=Snap&channel=0&user=myuser&password=mypassword"
+    id: cam1_roi1
+    filters:
+      - "rotate:-15"
+      - "crop:250,215,525,560"
+      - "upscale:640"
