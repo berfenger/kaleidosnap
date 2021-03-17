@@ -68,7 +68,7 @@ A reference `docker-compose.yml` file is provided.
 Default server port is 8080 and `config.yml` should be mounted on `/config.yml`.
 
 ## Licensing
-Copyright 2020 Arturo Casal
+Copyright 2021 Arturo Casal
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
