@@ -2,7 +2,7 @@ version: '2.4'
 
 services:
   kaleidosnap:
-    iamge: acasal/kaleidosnap:latest
+    image: acasal/kaleidosnap:latest
     restart: unless-stopped
     volumes:
       - ./config.yml:/config.yml
