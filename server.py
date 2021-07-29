@@ -6,6 +6,7 @@ from typing import Optional
 from flask import Flask, send_file, json, request
 from waitress import serve
 from config import load_config, Source
+import image_filters
 
 # load env config
 try:
@@ -65,7 +66,7 @@ def source(sourceid):
         try:
             with url_to_image(src.url) as im:
                 if not passthrough:
-                    im = src.apply_filters(config, im)
+                    im = image_filters.apply_filters(src, config, im)
                 output = BytesIO()
                 im.save(output, format="JPEG")
                 output.seek(0)

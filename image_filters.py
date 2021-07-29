@@ -1,5 +1,5 @@
 from PIL import Image, ImageDraw
-from config import Config
+from config import Config, Source
 
 
 def scale_coord(ref: int, v: int) -> int:
@@ -133,3 +133,10 @@ def parse_image_filter(s: str) -> ImageFilter:
             raise Exception("Invalid image filter " + s)
     except Exception:
         raise Exception("Invalid image filter " + s)
+
+
+def apply_filters(source: Source, config: Config, image: Image):
+    im = image
+    for tr in source.filters:
+        im = tr.apply_to_image(config, im)
+    return im

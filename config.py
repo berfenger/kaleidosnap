@@ -1,5 +1,4 @@
 import yaml
-from PIL import Image
 
 
 class Source:
@@ -7,12 +6,6 @@ class Source:
         self.id = _id
         self.url = url
         self.filters = filters
-        
-    def apply_filters(self, config, image: Image):
-        im = image
-        for tr in self.filters:
-            im = tr.apply_to_image(config, im)
-        return im
 
 
 class Config:
@@ -25,7 +18,11 @@ def load_config(file) -> Config:
     with open(file, 'r') as stream:
         p = yaml.safe_load(stream)
         srcs = list(map(create_source, p['sources']))
-        return Config(srcs, p['mask_color'] or '#000000')
+        if 'mask_color' in p:
+            mc = p['mask_color']
+        else:
+            mc = '#000000'
+        return Config(srcs, mc)
 
 
 def create_source(src: dict) -> Source:
