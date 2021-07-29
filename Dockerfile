@@ -10,6 +10,8 @@ RUN . /opt/venv/bin/activate && pip install --upgrade pip
 RUN . /opt/venv/bin/activate && pip install -r requirements.txt
 
 FROM python:3.9-slim
+RUN apt update
+RUN apt install -y fonts-noto-core
 COPY --from=builder /opt/venv /opt/venv
 COPY *.py /opt/venv/
 WORKDIR /opt/venv/

@@ -1,5 +1,6 @@
 from PIL import Image, ImageDraw
 from config import Config, Source
+from image_labels import draw_text, draw_date
 
 
 def scale_coord(ref: int, v: int) -> int:
@@ -108,6 +109,48 @@ class GreyscaleImageFilter(ImageFilter):
         return image.convert('L')
 
 
+class LabelImageFilter(ImageFilter):
+    def __init__(self, params: str):
+        plist = params.split(";")
+        # label:text;text_size;text_align;text_color
+        try:
+            self.text = plist[0]
+            self.tsize = int(plist[1])
+            self.talign = plist[2]
+            self.tcolor = plist[3]
+            if len(plist) == 5:
+                self.margin = plist[4]
+            else:
+                self.margin = 25
+        except Exception:
+            raise Exception("invalid label parameters " + params)
+
+    def apply_to_image(self, config: Config, image: Image):
+        im = draw_text(image, self.talign, self.text, self.tsize, self.tcolor, margin_h=self.margin)
+        return im
+
+
+class DateImageFilter(ImageFilter):
+    def __init__(self, params: str):
+        plist = params.split(";")
+        # date:date_format;text_size;text_align;text_color
+        try:
+            self.date_format = plist[0]
+            self.tsize = int(plist[1])
+            self.talign = plist[2]
+            self.tcolor = plist[3]
+            if len(plist) == 5:
+                self.margin = plist[4]
+            else:
+                self.margin = 25
+        except Exception:
+            raise Exception("invalid date parameters " + params)
+
+    def apply_to_image(self, config: Config, image: Image):
+        im = draw_date(image, self.talign, self.date_format, self.tsize, self.tcolor, margin_h=self.margin)
+        return im
+
+
 def parse_image_filter(s: str) -> ImageFilter:
     try:
         i = s.find(':')
@@ -129,6 +172,10 @@ def parse_image_filter(s: str) -> ImageFilter:
             return MaskImageFilter(params)
         elif slug == 'greyscale':
             return GreyscaleImageFilter()
+        elif slug == 'label':
+            return LabelImageFilter(params)
+        elif slug == 'date':
+            return DateImageFilter(params)
         else:
             raise Exception("Invalid image filter " + s)
     except Exception:
