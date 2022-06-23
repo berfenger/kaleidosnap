@@ -71,8 +71,8 @@ def source(sourceid):
                 im.save(output, format="JPEG")
                 output.seek(0)
                 return send_file(output, mimetype="image/jpeg")
-        except OSError:
-            pass
+        except:
+            return "Could not get remote image", 500
     else:
         return "Invalid source ID", 404
 
