@@ -34,8 +34,11 @@ def url_to_image(url: str) -> Image:
     if url.startswith("file://"):
         return Image.open(url[7::])
     else:
-        response = requests.get(url)
-        return Image.open(BytesIO(response.content))
+        response = requests.get(url, timeout=(1, 2.5))
+        if response.status_code == 200:
+            return Image.open(BytesIO(response.content))
+        else:
+            raise Exception("http error: " + repr(response.status_code))
 
 
 # http server
@@ -71,8 +74,8 @@ def source(sourceid):
                 im.save(output, format="JPEG")
                 output.seek(0)
                 return send_file(output, mimetype="image/jpeg")
-        except:
-            return "Could not get remote image", 500
+        except Exception as e:
+            return "Could not get remote image: " + repr(e), 500
     else:
         return "Invalid source ID", 404
 
